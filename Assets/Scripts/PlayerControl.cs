@@ -15,18 +15,21 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Connections")]
     public Rigidbody playerRb;
+    public GameManager gm;
 
     [Header("Shooting")]
     public GameObject basicProjectilePrefab;
     public GameObject basicProjectileSpawnPoint;
     public float timeBetweenShootingBasicProjectileInSeconds;
 
+
     void Start()
     {
         //Get the various components required for the scripts to work
         playerRb = GetComponent<Rigidbody>();
-
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         //Do this upon game start
+
     }
     void Update()
     {
@@ -54,5 +57,13 @@ public class PlayerControl : MonoBehaviour
         Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
         //Ensure there is a delay between each projectile fired
         yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("BasicEnemy"))
+        {
+            gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
+        }
     }
 }
