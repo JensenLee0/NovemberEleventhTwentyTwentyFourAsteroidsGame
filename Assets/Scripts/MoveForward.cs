@@ -20,6 +20,6 @@ public class MoveForward : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        myRb.AddForce(Vector3.forward * moveSpeed, ForceMode.Force);
+        myRb.AddRelativeForce(Vector3.forward * moveSpeed, ForceMode.Force);
     }
 }
