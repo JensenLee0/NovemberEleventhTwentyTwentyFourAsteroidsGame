@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour
         verticalAxis = Input.GetAxis("Vertical");
 
         //Shoot a basic projectile when the specific keycode is pressed
-        if(Input.GetKey(shootBasicProjectileKeyCode))
+        if(Input.GetButton("Shoot"))
         {
             StartCoroutine(ShootBasicProjectile());
         }
