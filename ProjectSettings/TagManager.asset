@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - BasicEnemy
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PlayerProjectile
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 

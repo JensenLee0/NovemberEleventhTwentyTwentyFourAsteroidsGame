@@ -10,7 +10,6 @@ public class SpawnManager : MonoBehaviour
     [Header("Spawning Data")]
     public float xSpawnRange;
     public float zSpawnRange;
-    public float spawnRotation;
     [Header("Enemy Numbers")]
     public int basicEnemyCount;
 
@@ -49,8 +48,8 @@ public class SpawnManager : MonoBehaviour
     private Vector3 GenerateSpawnPosition()
     {
         float spawnPosX = Random.Range(-xSpawnRange, xSpawnRange);
-        float spawnPosY = Random.Range(-zSpawnRange, zSpawnRange);
-        Vector3 randomPos = new Vector3(spawnPosX, spawnPosY);
+        float spawnPosZ = Random.Range(-zSpawnRange, zSpawnRange);
+        Vector3 randomPos = new Vector3(spawnPosX, 0, spawnPosZ);
         return randomPos;
     }
 }

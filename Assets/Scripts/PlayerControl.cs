@@ -21,6 +21,7 @@ public class PlayerControl : MonoBehaviour
     public GameObject basicProjectilePrefab;
     public GameObject basicProjectileSpawnPoint;
     public float timeBetweenShootingBasicProjectileInSeconds;
+    public bool canShootBasicProjectile;
 
 
     void Start()
@@ -29,6 +30,7 @@ public class PlayerControl : MonoBehaviour
         playerRb = GetComponent<Rigidbody>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         //Do this upon game start
+        canShootBasicProjectile = true;
 
     }
     void Update()
@@ -38,7 +40,7 @@ public class PlayerControl : MonoBehaviour
         verticalAxis = Input.GetAxis("Vertical");
 
         //Shoot a basic projectile when the specific keycode is pressed
-        if(Input.GetKeyDown(shootBasicProjectileKeyCode))
+        if(Input.GetKey(shootBasicProjectileKeyCode))
         {
             StartCoroutine(ShootBasicProjectile());
         }
@@ -52,11 +54,16 @@ public class PlayerControl : MonoBehaviour
         playerRb.AddRelativeForce(Vector3.forward * moveSpeed * verticalAxis);
     }
     IEnumerator ShootBasicProjectile()
-    { 
-        //Create a basic projectile
-        Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
-        //Ensure there is a delay between each projectile fired
-        yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
+    {
+        if (canShootBasicProjectile == true)
+        {
+            //Create a basic projectile
+            Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
+            canShootBasicProjectile = false;
+            //Ensure there is a delay between each projectile fired
+            yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
+            canShootBasicProjectile = true;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
