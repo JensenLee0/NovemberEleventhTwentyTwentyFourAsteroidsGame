@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreDisplay;
     [Header("Game")]
     public bool isGameActive;
+    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI titleScreenDisplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,10 +26,19 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         playerLifeDisplay.text = "lives: " + playerCurrentLifeCount;
+        if(playerCurrentLifeCount <= 0)
+        {
+            GameOver();
+        }
+    }
+    public void StartGame()
+    {
+        titleScreenDisplay.enabled = false;
     }
     public void GameOver()
     {
         isGameActive = false;
+        gameOverText.enabled = true;
     }
     public void UpdateScore()
     {
