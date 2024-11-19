@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 20
   bulletType: Basic
-  timeBeforeDeathinSeconds: 2.5
+  timeBeforeDeathinSeconds: 3
 --- !u!1 &7236555700092209739
 GameObject:
   m_ObjectHideFlags: 0

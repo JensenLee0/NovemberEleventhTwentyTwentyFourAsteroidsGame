@@ -20,11 +20,14 @@ public class BasicEnemyControl : MonoBehaviour
     [Header("Other")]
     public bool canSplit;
     public Splitter splitterScript;
+    public int pointsAwardedforKilling;
+    public GameManager gm;
 
     // Start is called before the first frame update
     void Start()
     {
         myRb = GetComponent<Rigidbody>();
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         if(canSplit == true)
         {
             splitterScript = GetComponent<Splitter>();
@@ -50,6 +53,7 @@ public class BasicEnemyControl : MonoBehaviour
         if(collision.gameObject.CompareTag("PlayerProjectile"))
         {
             Destroy(collision.gameObject);
+            gm.addScore(pointsAwardedforKilling);
             Destroy(gameObject);
             if(canSplit == true)
             {
