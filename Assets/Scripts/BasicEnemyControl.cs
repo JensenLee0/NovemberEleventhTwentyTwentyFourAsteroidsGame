@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BasicEnemyControl : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed;
     public Rigidbody myRb;
     private float xForce;
@@ -16,11 +17,18 @@ public class BasicEnemyControl : MonoBehaviour
     public float zMinForce;
     public float maxRotation;
     public float minRotation;
+    [Header("Other")]
+    public bool canSplit;
+    public Splitter splitterScript;
 
     // Start is called before the first frame update
     void Start()
     {
         myRb = GetComponent<Rigidbody>();
+        if(canSplit == true)
+        {
+            splitterScript = GetComponent<Splitter>();
+        }
         xForce = Random.Range(xMinForce, xMaxForce);
         zForce = Random.Range(zMinForce, zMaxForce);
         startRotation = Random.Range(minRotation, maxRotation);
@@ -43,6 +51,10 @@ public class BasicEnemyControl : MonoBehaviour
         {
             Destroy(collision.gameObject);
             Destroy(gameObject);
+            if(canSplit == true)
+            {
+                splitterScript.SplitIntoTwoThings();
+            }
         }
     }
 }
