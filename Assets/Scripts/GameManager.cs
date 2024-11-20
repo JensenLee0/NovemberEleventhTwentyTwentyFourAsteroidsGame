@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -15,30 +17,37 @@ public class GameManager : MonoBehaviour
     [Header("Game")]
     public bool isGameActive;
     public TextMeshProUGUI gameOverText;
-    public TextMeshProUGUI titleScreenDisplay;
+    public Button restartButton;
+    [Header("Connections")]
+    public PlayerControl playerScript;
+    public SpawnManager spawnManagerScript;
     // Start is called before the first frame update
     void Start()
     {
-        playerCurrentLifeCount = playerMaxLifeCount;
+        playerScript = GameObject.Find("Player").GetComponent<PlayerControl>();
+        spawnManagerScript = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        StartGameInGameManager();
+        spawnManagerScript.startGameSpawnManager();
+        gameOverText.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         playerLifeDisplay.text = "lives: " + playerCurrentLifeCount;
-        if(playerCurrentLifeCount <= 0)
-        {
-            GameOver();
-        }
     }
-    public void StartGame()
+    public void StartGameInGameManager()
     {
-        titleScreenDisplay.enabled = false;
+        playerCurrentLifeCount = playerMaxLifeCount;
+        score = 0;
+        UpdateScore();
     }
     public void GameOver()
     {
         isGameActive = false;
-        gameOverText.enabled = true;
+        gameOverText.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
     }
     public void UpdateScore()
     {
@@ -49,4 +58,10 @@ public class GameManager : MonoBehaviour
         score = score + scoreToAdd;
         UpdateScore();
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("button was pressed");
+    }
+
 }

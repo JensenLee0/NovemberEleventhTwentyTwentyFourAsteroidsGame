@@ -11,7 +11,6 @@ public class PlayerControl : MonoBehaviour
     [Header("Inputs")]
     public float horizontalAxis;
     public float verticalAxis;
-    public KeyCode shootBasicProjectileKeyCode;
 
     [Header("Connections")]
     public Rigidbody playerRb;
@@ -22,16 +21,28 @@ public class PlayerControl : MonoBehaviour
     public GameObject basicProjectileSpawnPoint;
     public float timeBetweenShootingBasicProjectileInSeconds;
     public bool canShootBasicProjectile;
+    public bool shieldIsActive;
+    public bool shieldIsOnCooldown;
+    public float shieldCooldown;
+    public float shieldCharge;
 
+    [Header("Other")]
+    public bool playerIsAliveInPlayerControl;
 
     void Start()
     {
         //Get the various components required for the scripts to work
         playerRb = GetComponent<Rigidbody>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-        //Do this upon game start
+        //Start the Game
+        StartGame();
+    }
+    void StartGame()
+    {
         canShootBasicProjectile = true;
-
+        playerIsAliveInPlayerControl = true;
+        shieldIsActive = false;
+        shieldIsOnCooldown = false;
     }
     void Update()
     {
@@ -44,25 +55,71 @@ public class PlayerControl : MonoBehaviour
         {
             StartCoroutine(ShootBasicProjectile());
         }
+        //Activate a shield as long as a specific button is pressed
+        if(Input.GetButton("Shield"))
+        {
+            if (shieldIsOnCooldown == false)
+            {
+                if (shieldCharge >= 1)
+                {
+                    shieldIsActive = true;
+                }
+                if (shieldCharge < 1)
+                {
+                    shieldIsActive = false;
+                    StartCoroutine(ShieldCooldown());
+                }
+            }
+        }
+        if (shieldCharge < 1)
+        {
+            shieldIsActive = false;
+        }
     }
-
+    IEnumerator ShieldCooldown()
+    {
+        shieldIsOnCooldown = true;
+        yield return new WaitForSeconds(shieldCooldown);
+        shieldIsOnCooldown = false;
+    }
     private void FixedUpdate()
     {
-        //Rotate based off of Horizontal Axis
-        transform.Rotate(Vector3.up * turnSpeed * horizontalAxis);
-        //Move based off of Vertical Axis
-        playerRb.AddRelativeForce(Vector3.forward * moveSpeed * verticalAxis);
+        if (playerIsAliveInPlayerControl == true)
+        {
+            //Rotate based off of Horizontal Axis
+            transform.Rotate(Vector3.up * turnSpeed * horizontalAxis * Time.deltaTime);
+            //Move based off of Vertical Axis
+            playerRb.AddRelativeForce(Vector3.forward * moveSpeed * verticalAxis);
+            if(shieldIsActive == false)
+            {
+                shieldCharge = shieldCharge + 1;
+                if(shieldCharge >= 100)
+                {
+                    shieldCharge = 100;
+                }
+            }
+            if(shieldIsActive == true)
+            {
+                shieldCharge = shieldCharge - 1;
+            }
+        }
     }
     IEnumerator ShootBasicProjectile()
     {
-        if (canShootBasicProjectile == true)
+        if (playerIsAliveInPlayerControl == true)
         {
-            //Create a basic projectile
-            Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
-            canShootBasicProjectile = false;
-            //Ensure there is a delay between each projectile fired
-            yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
-            canShootBasicProjectile = true;
+            if (shieldIsActive == false)
+            {
+                if (canShootBasicProjectile == true)
+                {
+                    //Create a basic projectile
+                    Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
+                    canShootBasicProjectile = false;
+                    //Ensure there is a delay between each projectile fired
+                    yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
+                    canShootBasicProjectile = true;
+                }
+            }
         }
     }
 
@@ -70,7 +127,15 @@ public class PlayerControl : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("BasicEnemy"))
         {
-            gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
+            if (shieldIsActive == false)
+            {
+                gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
+                if (gm.playerCurrentLifeCount <= 0)
+                {
+                    playerIsAliveInPlayerControl = false;
+                    gm.GameOver();
+                }
+            }
         }
     }
 }
