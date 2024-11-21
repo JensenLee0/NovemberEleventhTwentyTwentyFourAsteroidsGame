@@ -25,6 +25,7 @@ public class PlayerControl : MonoBehaviour
     public bool shieldIsOnCooldown;
     public float shieldCooldown;
     public float shieldCharge;
+    public GameObject shieldIndicator;
 
     [Header("Other")]
     public bool playerIsAliveInPlayerControl;
@@ -43,6 +44,7 @@ public class PlayerControl : MonoBehaviour
         playerIsAliveInPlayerControl = true;
         shieldIsActive = false;
         shieldIsOnCooldown = false;
+        shieldIndicator.gameObject.SetActive(false);
     }
     void Update()
     {
@@ -58,22 +60,35 @@ public class PlayerControl : MonoBehaviour
         //Activate a shield as long as a specific button is pressed
         if(Input.GetButton("Shield"))
         {
-            if (shieldIsOnCooldown == false)
+            if (playerIsAliveInPlayerControl == true)
             {
-                if (shieldCharge >= 1)
+                if (shieldIsOnCooldown == false)
                 {
-                    shieldIsActive = true;
-                }
-                if (shieldCharge < 1)
-                {
-                    shieldIsActive = false;
-                    StartCoroutine(ShieldCooldown());
+                    if (shieldCharge >= 1)
+                    {
+                        shieldIsActive = true;
+                        shieldIndicator.gameObject.SetActive(true);
+                    }
+                    if (shieldCharge < 1)
+                    {
+                        shieldIsActive = false;
+                        StartCoroutine(ShieldCooldown());
+                        shieldIndicator.gameObject.SetActive(false);
+                    }
                 }
             }
+        }
+        if(Input.GetButtonUp("Shield"))
+        {
+            shieldIsActive = false;
         }
         if (shieldCharge < 1)
         {
             shieldIsActive = false;
+        }
+        if(shieldIsActive == false)
+        {
+            shieldIndicator.gameObject.SetActive(false);
         }
     }
     IEnumerator ShieldCooldown()
@@ -93,9 +108,9 @@ public class PlayerControl : MonoBehaviour
             if(shieldIsActive == false)
             {
                 shieldCharge = shieldCharge + 1;
-                if(shieldCharge >= 100)
+                if(shieldCharge >= 250)
                 {
-                    shieldCharge = 100;
+                    shieldCharge = 250;
                 }
             }
             if(shieldIsActive == true)

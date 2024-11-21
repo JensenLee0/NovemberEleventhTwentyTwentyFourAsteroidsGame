@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int playerCurrentLifeCount;
     public int playerMaxLifeCount;
     public TextMeshProUGUI playerLifeDisplay;
+    public TextMeshProUGUI shieldDisplay;
     [Header("Score")]
     public int score;
     public TextMeshProUGUI scoreDisplay;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         playerLifeDisplay.text = "lives: " + playerCurrentLifeCount;
+        shieldDisplay.text = "shield charge: " + playerScript.shieldCharge;
     }
     public void StartGameInGameManager()
     {

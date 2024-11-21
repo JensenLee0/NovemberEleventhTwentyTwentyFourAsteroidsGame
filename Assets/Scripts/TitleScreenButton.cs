@@ -17,4 +17,11 @@ public class TitleScreenButton : MonoBehaviour
     {
         SceneManager.LoadScene("THEGAME");
     }
+    void Update()
+    {
+        if(Input.GetButtonDown("Shoot"))
+        {
+            StartGameFromTitleScreenButton();
+        }
+    }
 }
