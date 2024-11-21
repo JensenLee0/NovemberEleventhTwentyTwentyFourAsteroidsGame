@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
     {
         playerLifeDisplay.text = "lives: " + playerCurrentLifeCount;
         shieldDisplay.text = "shield charge: " + playerScript.shieldCharge;
+        if(playerCurrentLifeCount < 0)
+        {
+            playerCurrentLifeCount = 0;
+        }
     }
     public void StartGameInGameManager()
     {
