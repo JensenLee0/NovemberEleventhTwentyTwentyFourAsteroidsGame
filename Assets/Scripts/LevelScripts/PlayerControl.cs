@@ -27,6 +27,14 @@ public class PlayerControl : MonoBehaviour
     public float shieldCharge;
     public GameObject shieldIndicator;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioSource asteroidAudioSource;
+    public AudioClip shootBasicProjectileAudio;
+    public AudioClip explode;
+    public AudioClip asteroidExplode;
+    public AudioClip echoScream;
+
     [Header("Other")]
     public bool playerIsAliveInPlayerControl;
 
@@ -35,6 +43,8 @@ public class PlayerControl : MonoBehaviour
         //Get the various components required for the scripts to work
         playerRb = GetComponent<Rigidbody>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        audioSource = GetComponent<AudioSource>();
+        asteroidAudioSource = GameObject.Find("AsteroidAudio").GetComponent<AudioSource>();
         //Start the Game
         StartGame();
     }
@@ -130,6 +140,7 @@ public class PlayerControl : MonoBehaviour
                     //Create a basic projectile
                     Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
                     canShootBasicProjectile = false;
+                    audioSource.PlayOneShot(shootBasicProjectileAudio, 0.5f);
                     //Ensure there is a delay between each projectile fired
                     yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
                     canShootBasicProjectile = true;
@@ -142,12 +153,16 @@ public class PlayerControl : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("BasicEnemy"))
         {
-            if (shieldIsActive == false)
+            if (shieldIsActive == false && playerIsAliveInPlayerControl == true)
             {
                 gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
-                if (gm.playerCurrentLifeCount <= 0)
+                asteroidAudioSource.PlayOneShot(asteroidExplode, 1.0f);
+                Destroy(collision.gameObject);
+                if (gm.playerCurrentLifeCount == 0)
                 {
                     playerIsAliveInPlayerControl = false;
+                    audioSource.PlayOneShot(explode, 3.0f);
+                    audioSource.PlayOneShot(echoScream, 0.5f);
                     gm.GameOver();
                 }
             }

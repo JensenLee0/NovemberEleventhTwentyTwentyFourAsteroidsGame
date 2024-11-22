@@ -22,12 +22,15 @@ public class BasicEnemyControl : MonoBehaviour
     public Splitter splitterScript;
     public int pointsAwardedforKilling;
     public GameManager gm;
+    public AudioSource audioSource;
+    public AudioClip explode;
 
     // Start is called before the first frame update
     void Start()
     {
         myRb = GetComponent<Rigidbody>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        audioSource = GameObject.Find("AsteroidAudio").GetComponent<AudioSource>();
         if(canSplit == true)
         {
             splitterScript = GetComponent<Splitter>();
@@ -54,6 +57,7 @@ public class BasicEnemyControl : MonoBehaviour
         {
             Destroy(collision.gameObject);
             gm.addScore(pointsAwardedforKilling);
+            audioSource.PlayOneShot(explode, 1.0f);
             Destroy(gameObject);
             if(canSplit == true)
             {

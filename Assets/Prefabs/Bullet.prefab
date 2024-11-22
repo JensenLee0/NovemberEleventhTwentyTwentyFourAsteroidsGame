@@ -98,9 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d66b5e7f744dd4a9c33e08164a3241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 30
   bulletType: Basic
-  timeBeforeDeathinSeconds: 3
+  timeBeforeDeathinSeconds: 2
 --- !u!114 &7116201973083967397
 MonoBehaviour:
   m_ObjectHideFlags: 0
