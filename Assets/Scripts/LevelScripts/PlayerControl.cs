@@ -37,6 +37,7 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Other")]
     public bool playerIsAliveInPlayerControl;
+    public GameObject thrusterParticles;
 
     void Start()
     {
@@ -45,6 +46,7 @@ public class PlayerControl : MonoBehaviour
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         audioSource = GetComponent<AudioSource>();
         asteroidAudioSource = GameObject.Find("AsteroidAudio").GetComponent<AudioSource>();
+        thrusterParticles.SetActive(false); // for when stopped
         //Start the Game
         StartGame();
     }
@@ -100,6 +102,14 @@ public class PlayerControl : MonoBehaviour
         {
             shieldIndicator.gameObject.SetActive(false);
         }
+       if(Input.GetAxisRaw("Vertical") > 0)
+        {
+            thrusterParticles.SetActive(true);
+        }
+       else
+        {
+            thrusterParticles.SetActive(false);
+        }
     }
     IEnumerator ShieldCooldown()
     {
@@ -114,7 +124,7 @@ public class PlayerControl : MonoBehaviour
             //Rotate based off of Horizontal Axis
             transform.Rotate(Vector3.up * turnSpeed * horizontalAxis * Time.deltaTime);
             //Move based off of Vertical Axis
-            playerRb.AddRelativeForce(Vector3.forward * moveSpeed * verticalAxis);
+                playerRb.AddRelativeForce(Vector3.forward * moveSpeed * verticalAxis);
             if(shieldIsActive == false)
             {
                 shieldCharge = shieldCharge + 1;
