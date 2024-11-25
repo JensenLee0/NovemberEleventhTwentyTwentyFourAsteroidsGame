@@ -25,6 +25,8 @@ public class BasicEnemyControl : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip explode;
 
+    public bool canOnlyBeDestroyedByMissiles;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,9 +57,8 @@ public class BasicEnemyControl : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("PlayerProjectile"))
         {
-            Destroy(collision.gameObject);
             gm.addScore(pointsAwardedforKilling);
-            audioSource.PlayOneShot(explode, 1.0f);
+            audioSource.PlayOneShot(explode, 0.5f);
             Destroy(gameObject);
             if(canSplit == true)
             {

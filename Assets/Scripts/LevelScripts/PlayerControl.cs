@@ -19,8 +19,14 @@ public class PlayerControl : MonoBehaviour
     [Header("Shooting")]
     public GameObject basicProjectilePrefab;
     public GameObject basicProjectileSpawnPoint;
+    public GameObject missile;
+    public GameObject[] missileSpawn;
     public float timeBetweenShootingBasicProjectileInSeconds;
+    public float timeBetweenShootingMissileInSeconds;
     public bool canShootBasicProjectile;
+    public bool canShootMissile;
+    
+    [Header("Shield")]
     public bool shieldIsActive;
     public bool shieldIsOnCooldown;
     public float shieldCooldown;
@@ -53,6 +59,7 @@ public class PlayerControl : MonoBehaviour
     void StartGame()
     {
         canShootBasicProjectile = true;
+        canShootMissile = true;
         playerIsAliveInPlayerControl = true;
         shieldIsActive = false;
         shieldIsOnCooldown = false;
@@ -65,42 +72,53 @@ public class PlayerControl : MonoBehaviour
         verticalAxis = Input.GetAxis("Vertical");
 
         //Shoot a basic projectile when the specific keycode is pressed
-        if(Input.GetButton("Shoot"))
         {
-            StartCoroutine(ShootBasicProjectile());
+            if (Input.GetButton("Shoot"))
+            {
+                StartCoroutine(ShootBasicProjectile());
+            }
+        }
+        //Shoot a missile when a specific button is pressed
+        {
+            if (Input.GetButton("Missile"))
+            {
+                StartCoroutine(ShootMissile());
+            }
         }
         //Activate a shield as long as a specific button is pressed
-        if(Input.GetButton("Shield"))
         {
-            if (playerIsAliveInPlayerControl == true)
+            if (Input.GetButton("Shield"))
             {
-                if (shieldIsOnCooldown == false)
+                if (playerIsAliveInPlayerControl == true)
                 {
-                    if (shieldCharge >= 1)
+                    if (shieldIsOnCooldown == false)
                     {
-                        shieldIsActive = true;
-                        shieldIndicator.gameObject.SetActive(true);
-                    }
-                    if (shieldCharge < 1)
-                    {
-                        shieldIsActive = false;
-                        StartCoroutine(ShieldCooldown());
-                        shieldIndicator.gameObject.SetActive(false);
+                        if (shieldCharge >= 1)
+                        {
+                            shieldIsActive = true;
+                            shieldIndicator.gameObject.SetActive(true);
+                        }
+                        if (shieldCharge < 1)
+                        {
+                            shieldIsActive = false;
+                            StartCoroutine(ShieldCooldown());
+                            shieldIndicator.gameObject.SetActive(false);
+                        }
                     }
                 }
             }
-        }
-        if(Input.GetButtonUp("Shield"))
-        {
-            shieldIsActive = false;
-        }
-        if (shieldCharge < 1)
-        {
-            shieldIsActive = false;
-        }
-        if(shieldIsActive == false)
-        {
-            shieldIndicator.gameObject.SetActive(false);
+            if (Input.GetButtonUp("Shield"))
+            {
+                shieldIsActive = false;
+            }
+            if (shieldCharge < 1)
+            {
+                shieldIsActive = false;
+            }
+            if (shieldIsActive == false)
+            {
+                shieldIndicator.gameObject.SetActive(false);
+            }
         }
        if(Input.GetAxisRaw("Vertical") > 0)
         {
@@ -150,7 +168,7 @@ public class PlayerControl : MonoBehaviour
                     //Create a basic projectile
                     Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
                     canShootBasicProjectile = false;
-                    audioSource.PlayOneShot(shootBasicProjectileAudio, 0.5f);
+                    audioSource.PlayOneShot(shootBasicProjectileAudio, 0.25f);
                     //Ensure there is a delay between each projectile fired
                     yield return new WaitForSeconds(timeBetweenShootingBasicProjectileInSeconds);
                     canShootBasicProjectile = true;
@@ -158,7 +176,26 @@ public class PlayerControl : MonoBehaviour
             }
         }
     }
-
+    IEnumerator ShootMissile()
+    {
+        if(playerIsAliveInPlayerControl == true)
+        {
+            if(shieldIsActive == false)
+            {
+                if(canShootMissile == true)
+                {
+                    //select a random place to spawn the missile between two options
+                    int missileSpawnIndex = Random.Range(0, missileSpawn.Length);
+                    //create a missile
+                    Instantiate(missile, missileSpawn[missileSpawnIndex].transform.position, missileSpawn[missileSpawnIndex].transform.rotation);
+                    canShootMissile = false;
+                    //go on cooldown
+                    yield return new WaitForSeconds(timeBetweenShootingMissileInSeconds);
+                    canShootMissile = true;
+                }
+            }
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("BasicEnemy"))
@@ -166,7 +203,7 @@ public class PlayerControl : MonoBehaviour
             if (shieldIsActive == false && playerIsAliveInPlayerControl == true)
             {
                 gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
-                asteroidAudioSource.PlayOneShot(asteroidExplode, 1.0f);
+                asteroidAudioSource.PlayOneShot(asteroidExplode, 0.5f);
                 Destroy(collision.gameObject);
                 if (gm.playerCurrentLifeCount == 0)
                 {
