@@ -6,6 +6,7 @@ public class SpawnManager : MonoBehaviour
 {
     [Header("Enemy Prefabs")]
     public GameObject basicEnemyPrefab;
+    public GameObject missileReloadPowerup3;
 
     [Header("Spawning Data")]
     public float xSpawnRange;
@@ -46,6 +47,13 @@ public class SpawnManager : MonoBehaviour
         {
             Instantiate(basicEnemyPrefab, GenerateSpawnPosition(), basicEnemyPrefab.transform.rotation);
         }
+        //Spawn missile reload
+        int randomthing = Random.Range(1, 3);
+        if (randomthing == 1)
+        {
+            Instantiate(missileReloadPowerup3, GenerateSpawnPosition(), missileReloadPowerup3.transform.rotation);
+        }
+
     }
 
     private Vector3 GenerateSpawnPosition()

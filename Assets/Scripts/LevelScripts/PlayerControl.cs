@@ -22,6 +22,7 @@ public class PlayerControl : MonoBehaviour
     public GameObject basicProjectileSpawnPoint2;
     public GameObject missile;
     public GameObject[] missileSpawn;
+    public int missileAmmo;
     public float timeBetweenShootingBasicProjectileInSeconds;
     public float timeBetweenShootingMissileInSeconds;
     public bool canShootBasicProjectile;
@@ -57,7 +58,8 @@ public class PlayerControl : MonoBehaviour
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         audioSource = GetComponent<AudioSource>();
         asteroidAudioSource = GameObject.Find("AsteroidAudio").GetComponent<AudioSource>();
-        thrusterParticles.SetActive(false); // for when stopped
+        thrusterParticles.SetActive(false);
+        missileAmmo = 4;
         //Start the Game
         StartGame();
     }
@@ -127,6 +129,10 @@ public class PlayerControl : MonoBehaviour
             {
                 shieldIndicator.gameObject.SetActive(false);
             }
+            if(missileAmmo > 4)
+            {
+                missileAmmo = 4;
+            }
         }
        if(Input.GetAxisRaw("Vertical") > 0)
         {
@@ -161,7 +167,7 @@ public class PlayerControl : MonoBehaviour
             }
             if(shieldIsActive == true)
             {
-                shieldCharge = shieldCharge - 1;
+                shieldCharge = shieldCharge - 2;
             }
         }
     }
@@ -191,7 +197,7 @@ public class PlayerControl : MonoBehaviour
         {
             if(shieldIsActive == false)
             {
-                if(canShootMissile == true)
+                if(canShootMissile == true && missileAmmo > 0)
                 {
                     //select a random place to spawn the missile between two options
                     int missileSpawnIndex = Random.Range(0, missileSpawn.Length);
@@ -199,6 +205,7 @@ public class PlayerControl : MonoBehaviour
                     Instantiate(missile, missileSpawn[missileSpawnIndex].transform.position, missileSpawn[missileSpawnIndex].transform.rotation);
                     audioSource.PlayOneShot(fireMissile, 2.0f);
                     canShootMissile = false;
+                    missileAmmo = missileAmmo - 1;
                     //go on cooldown
                     yield return new WaitForSeconds(timeBetweenShootingMissileInSeconds);
                     canShootMissile = true;

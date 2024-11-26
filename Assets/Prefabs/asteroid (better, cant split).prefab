@@ -143,6 +143,8 @@ MonoBehaviour:
   gm: {fileID: 0}
   audioSource: {fileID: 0}
   explode: {fileID: 8300000, guid: ba5690fe4b2dd1045bde67515eeedf67, type: 3}
+  missileReloadPowerup1: {fileID: 9190774656755930007, guid: 17152bfe2076c1746ade599e31b85f2b, type: 3}
+  canOnlyBeDestroyedByMissiles: 0
 --- !u!114 &1239609069047671455
 MonoBehaviour:
   m_ObjectHideFlags: 0

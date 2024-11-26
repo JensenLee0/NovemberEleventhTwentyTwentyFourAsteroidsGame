@@ -7,11 +7,12 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Player Life")]
+    [Header("Player Stats")]
     public int playerCurrentLifeCount;
     public int playerMaxLifeCount;
     public TextMeshProUGUI playerLifeDisplay;
     public TextMeshProUGUI shieldDisplay;
+    public TextMeshProUGUI missileAmmoDisplay;
     [Header("Score")]
     public int score;
     public TextMeshProUGUI scoreDisplay;
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     {
         playerLifeDisplay.text = "lives: " + playerCurrentLifeCount;
         shieldDisplay.text = "shield charge: " + playerScript.shieldCharge;
+        missileAmmoDisplay.text = "missiles: " + playerScript.missileAmmo;
         if(playerCurrentLifeCount < 0)
         {
             playerCurrentLifeCount = 0;

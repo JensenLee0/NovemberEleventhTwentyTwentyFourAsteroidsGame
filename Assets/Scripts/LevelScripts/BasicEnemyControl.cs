@@ -24,7 +24,7 @@ public class BasicEnemyControl : MonoBehaviour
     public GameManager gm;
     public AudioSource audioSource;
     public AudioClip explode;
-
+    public GameObject missileReloadPowerup1;
     public bool canOnlyBeDestroyedByMissiles;
 
     // Start is called before the first frame update
@@ -63,6 +63,12 @@ public class BasicEnemyControl : MonoBehaviour
             if(canSplit == true)
             {
                 splitterScript.SplitIntoTwoThings();
+                int randomthing = Random.Range(1, 21);
+                if (randomthing == 1)
+                {
+                    Instantiate(missileReloadPowerup1, gameObject.transform.position, missileReloadPowerup1.transform.rotation);
+                }
+
             }
         }
     }

@@ -1080,10 +1080,17 @@ MonoBehaviour:
   basicEnemyPrefab: {fileID: 3213480440027617798, guid: 6a0aab51954ecc64492e7edcfc3aee57, type: 3}
   xSpawnRange: 23
   zSpawnRange: 13
+  safetyRadius: 7
+  player: {fileID: 1418443061}
   basicEnemyCount: 0
   waveNumber: 0
-  basicEnemiesToSpawn: 7
+  basicEnemiesToSpawn: 10
   spawnManagerisActive: 1
+--- !u!1 &1418443061 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4761804368635522054, guid: 15c834d2dee8994428186605ee171cb4, type: 3}
+  m_PrefabInstance: {fileID: 8644572451178334725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1421047199
 GameObject:
   m_ObjectHideFlags: 0
@@ -1840,12 +1847,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5286807548980901567, guid: 15c834d2dee8994428186605ee171cb4, type: 3}
-      propertyPath: missile
+      propertyPath: shieldOn
       value: 
-      objectReference: {fileID: 2606412995066325748, guid: 5bd92188539685f46a0c1811de0f149f, type: 3}
+      objectReference: {fileID: 8300000, guid: 9ac603e4ddfd65b4ab8e58e77a6bac93, type: 3}
     - target: {fileID: 5286807548980901567, guid: 15c834d2dee8994428186605ee171cb4, type: 3}
-      propertyPath: timeBetweenShootingMissileInSeconds
-      value: 0.5
-      objectReference: {fileID: 0}
+      propertyPath: shieldOff
+      value: 
+      objectReference: {fileID: 8300000, guid: 1b158e3cd095f3d449c8c259f1da43de, type: 3}
+    - target: {fileID: 5286807548980901567, guid: 15c834d2dee8994428186605ee171cb4, type: 3}
+      propertyPath: fireMissile
+      value: 
+      objectReference: {fileID: 8300000, guid: 21da0fa1e0b35554fb70bd71c13291ac, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15c834d2dee8994428186605ee171cb4, type: 3}
