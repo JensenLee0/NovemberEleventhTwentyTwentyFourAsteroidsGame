@@ -18,7 +18,8 @@ public class PlayerControl : MonoBehaviour
 
     [Header("Shooting")]
     public GameObject basicProjectilePrefab;
-    public GameObject basicProjectileSpawnPoint;
+    public GameObject basicProjectileSpawnPoint1;
+    public GameObject basicProjectileSpawnPoint2;
     public GameObject missile;
     public GameObject[] missileSpawn;
     public float timeBetweenShootingBasicProjectileInSeconds;
@@ -33,10 +34,14 @@ public class PlayerControl : MonoBehaviour
     public float shieldCharge;
     public GameObject shieldIndicator;
 
+
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioSource asteroidAudioSource;
     public AudioClip shootBasicProjectileAudio;
+    public AudioClip fireMissile;
+    public AudioClip shieldOn;
+    public AudioClip shieldOff;
     public AudioClip explode;
     public AudioClip asteroidExplode;
     public AudioClip echoScream;
@@ -80,14 +85,14 @@ public class PlayerControl : MonoBehaviour
         }
         //Shoot a missile when a specific button is pressed
         {
-            if (Input.GetButton("Missile"))
+            if (Input.GetButtonDown("Missile"))
             {
                 StartCoroutine(ShootMissile());
             }
         }
         //Activate a shield as long as a specific button is pressed
         {
-            if (Input.GetButton("Shield"))
+            if (Input.GetButtonDown("Shield"))
             {
                 if (playerIsAliveInPlayerControl == true)
                 {
@@ -97,12 +102,14 @@ public class PlayerControl : MonoBehaviour
                         {
                             shieldIsActive = true;
                             shieldIndicator.gameObject.SetActive(true);
+                            audioSource.PlayOneShot(shieldOn, 1.0f);
                         }
                         if (shieldCharge < 1)
                         {
                             shieldIsActive = false;
                             StartCoroutine(ShieldCooldown());
                             shieldIndicator.gameObject.SetActive(false);
+                            audioSource.PlayOneShot(shieldOff, 0.75f);
                         }
                     }
                 }
@@ -110,6 +117,7 @@ public class PlayerControl : MonoBehaviour
             if (Input.GetButtonUp("Shield"))
             {
                 shieldIsActive = false;
+                audioSource.PlayOneShot(shieldOff, 0.75f);
             }
             if (shieldCharge < 1)
             {
@@ -166,7 +174,8 @@ public class PlayerControl : MonoBehaviour
                 if (canShootBasicProjectile == true)
                 {
                     //Create a basic projectile
-                    Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint.transform.position, gameObject.transform.rotation);
+                    Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint1.transform.position, gameObject.transform.rotation);
+                    Instantiate(basicProjectilePrefab, basicProjectileSpawnPoint2.transform.position, gameObject.transform.rotation);
                     canShootBasicProjectile = false;
                     audioSource.PlayOneShot(shootBasicProjectileAudio, 0.25f);
                     //Ensure there is a delay between each projectile fired
@@ -188,6 +197,7 @@ public class PlayerControl : MonoBehaviour
                     int missileSpawnIndex = Random.Range(0, missileSpawn.Length);
                     //create a missile
                     Instantiate(missile, missileSpawn[missileSpawnIndex].transform.position, missileSpawn[missileSpawnIndex].transform.rotation);
+                    audioSource.PlayOneShot(fireMissile, 2.0f);
                     canShootMissile = false;
                     //go on cooldown
                     yield return new WaitForSeconds(timeBetweenShootingMissileInSeconds);
@@ -203,12 +213,12 @@ public class PlayerControl : MonoBehaviour
             if (shieldIsActive == false && playerIsAliveInPlayerControl == true)
             {
                 gm.playerCurrentLifeCount = gm.playerCurrentLifeCount - 1;
-                asteroidAudioSource.PlayOneShot(asteroidExplode, 0.5f);
+                asteroidAudioSource.PlayOneShot(asteroidExplode, 0.25f);
                 Destroy(collision.gameObject);
                 if (gm.playerCurrentLifeCount == 0)
                 {
                     playerIsAliveInPlayerControl = false;
-                    audioSource.PlayOneShot(explode, 3.0f);
+                    audioSource.PlayOneShot(explode, 2.0f);
                     audioSource.PlayOneShot(echoScream, 0.5f);
                     gm.GameOver();
                 }

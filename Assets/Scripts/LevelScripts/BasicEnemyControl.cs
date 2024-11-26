@@ -58,7 +58,7 @@ public class BasicEnemyControl : MonoBehaviour
         if(collision.gameObject.CompareTag("PlayerProjectile"))
         {
             gm.addScore(pointsAwardedforKilling);
-            audioSource.PlayOneShot(explode, 0.5f);
+            audioSource.PlayOneShot(explode, 0.25f);
             Destroy(gameObject);
             if(canSplit == true)
             {

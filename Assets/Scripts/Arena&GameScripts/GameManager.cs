@@ -64,10 +64,4 @@ public class GameManager : MonoBehaviour
         score = score + scoreToAdd;
         UpdateScore();
     }
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Debug.Log("button was pressed");
-    }
-
 }

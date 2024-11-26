@@ -10,6 +10,8 @@ public class SpawnManager : MonoBehaviour
     [Header("Spawning Data")]
     public float xSpawnRange;
     public float zSpawnRange;
+    public float safetyRadius;
+    public GameObject player;
     [Header("Enemy Numbers")]
     public int basicEnemyCount;
 
@@ -22,8 +24,9 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     public void startGameSpawnManager()
     {
-        SpawnEnemyWave(waveNumber);
         spawnManagerisActive = true;
+        player = GameObject.Find("Player");
+        SpawnEnemyWave(waveNumber);
     }
 
     // Update is called once per frame
@@ -50,6 +53,12 @@ public class SpawnManager : MonoBehaviour
         float spawnPosX = Random.Range(-xSpawnRange, xSpawnRange);
         float spawnPosZ = Random.Range(-zSpawnRange, zSpawnRange);
         Vector3 randomPos = new Vector3(spawnPosX, 0, spawnPosZ);
+        while((randomPos - player.transform.position).magnitude < safetyRadius)
+        {
+            spawnPosX = Random.Range(-xSpawnRange, xSpawnRange);
+            spawnPosZ = Random.Range(-zSpawnRange, zSpawnRange);
+            randomPos = new Vector3(spawnPosX, 0, spawnPosZ);
+        }
         return randomPos;
     }
 }
