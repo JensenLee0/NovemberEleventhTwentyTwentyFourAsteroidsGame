@@ -44,6 +44,10 @@ public class GameManager : MonoBehaviour
         {
             playerCurrentLifeCount = 0;
         }
+        if(Input.GetButtonDown("Exit"))
+        {
+            Application.Quit();
+        }
     }
     public void StartGameInGameManager()
     {

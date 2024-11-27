@@ -19,7 +19,7 @@ public class RestartButton : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetButtonDown("Shoot"))
+        if (Input.GetButtonDown("Start"))
         {
             RestartGame();
         }

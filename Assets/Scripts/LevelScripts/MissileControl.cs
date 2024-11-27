@@ -12,7 +12,7 @@ public class MissileControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ExplosionDelay());
+
     }
 
     // Update is called once per frame
@@ -36,9 +36,4 @@ public class MissileControl : MonoBehaviour
         Instantiate(missileExplosion, gameObject.transform.position, gameObject.transform.rotation);
         Destroy(gameObject);
     }
-    IEnumerator ExplosionDelay()
-    {
-        yield return new WaitForSeconds(3);
-        Explode();
-    }
-}
+  }

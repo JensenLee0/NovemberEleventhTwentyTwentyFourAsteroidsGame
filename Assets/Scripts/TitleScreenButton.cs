@@ -19,9 +19,13 @@ public class TitleScreenButton : MonoBehaviour
     }
     void Update()
     {
-        if(Input.GetButtonDown("Shoot"))
+        if(Input.GetButtonDown("Start"))
         {
             StartGameFromTitleScreenButton();
+        }
+        if(Input.GetButtonDown("Exit"))
+        {
+            Application.Quit();
         }
     }
 }
