@@ -45,7 +45,6 @@ public class PlayerControl : MonoBehaviour
     public AudioClip shieldOff;
     public AudioClip explode;
     public AudioClip asteroidExplode;
-    public AudioClip echoScream;
 
     [Header("Other")]
     public bool playerIsAliveInPlayerControl;
@@ -226,7 +225,6 @@ public class PlayerControl : MonoBehaviour
                 {
                     playerIsAliveInPlayerControl = false;
                     audioSource.PlayOneShot(explode, 2.0f);
-                    audioSource.PlayOneShot(echoScream, 0.5f);
                     gm.GameOver();
                 }
             }

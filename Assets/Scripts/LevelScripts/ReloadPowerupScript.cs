@@ -11,9 +11,9 @@ public class ReloadPowerupScript : MonoBehaviour
     {
         playerScript = GameObject.Find("Player").GetComponent<PlayerControl>();
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             playerScript.missileAmmo += amountToReload;
             Destroy(gameObject);
